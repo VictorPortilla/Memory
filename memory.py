@@ -14,9 +14,10 @@ from turtle import *
 
 from freegames import path
 car = path('car.gif')
-tiles = list(range(32)) * 2
+tiles = ["A", "B", "C", "D", "E", "F", "F", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6"] * 2
 state = {'mark': None}
 hide = [True] * 64
+winCount = 32
 
 
 def square(x, y):
@@ -30,6 +31,23 @@ def square(x, y):
         forward(50)
         left(90)
     end_fill()
+
+def youWin():
+    """Draw square with "You Win" written on it"""
+    up()
+    goto(-120, 125)
+    down()
+    color('black', 'green')
+    begin_fill()
+    for count in range(2):
+        forward(240)
+        left(90)
+        forward(50)
+        left(90)
+    end_fill()
+    goto(0, 125)
+    color('white')
+    write("You Win!", font=('Arial', 30, 'normal'), align="center")
 
 
 def index(x, y):
@@ -50,9 +68,12 @@ def tap(x, y):
     if mark is None or mark == spot or tiles[mark] != tiles[spot]:
         state['mark'] = spot
     else:
+        global winCount
+        winCount = winCount - 1
         hide[spot] = False
         hide[mark] = False
         state['mark'] = None
+
 
 
 def draw():
@@ -61,11 +82,11 @@ def draw():
     goto(0, 0)
     shape(car)
     stamp()
-
     for count in range(64):
         if hide[count]:
             x, y = xy(count)
             square(x, y)
+
 
     mark = state['mark']
 
@@ -77,10 +98,14 @@ def draw():
         write(tiles[mark], font=('Arial', 30, 'normal'))
 
     update()
-    ontimer(draw, 100)
+    if (winCount > 0):
+        ontimer(draw, 100)
+    else:
+        youWin()
+    
 
-
-setup(420, 420, 370, 0)
+#shuffle(tiles)
+setup(420, 460, 370, 0)
 addshape(car)
 hideturtle()
 tracer(False)
