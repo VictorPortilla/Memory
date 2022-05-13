@@ -18,7 +18,7 @@ tiles = ["A", "B", "C", "D", "E", "F", "F", "H", "I", "J", "K", "L", "M", "N", "
 state = {'mark': None}
 hide = [True] * 64
 winCount = 32
-
+contTaps = 0
 
 def square(x, y):
     """Draw white square with black outline at (x, y)."""
@@ -62,8 +62,12 @@ def xy(count):
 
 def tap(x, y):
     """Update mark and hidden tiles based on tap."""
+    global contTaps
+    contTaps = contTaps + 1
     spot = index(x, y)
     mark = state['mark']
+    goto(0,210)
+    write(contTaps, font=("Arial", 30, "normal"), align = "center")
 
     if mark is None or mark == spot or tiles[mark] != tiles[spot]:
         state['mark'] = spot
@@ -73,7 +77,6 @@ def tap(x, y):
         hide[spot] = False
         hide[mark] = False
         state['mark'] = None
-
 
 
 def draw():
@@ -93,9 +96,9 @@ def draw():
     if mark is not None and hide[mark]:
         x, y = xy(mark)
         up()
-        goto(x + 2, y)
+        goto(x+25, y+5)
         color('black')
-        write(tiles[mark], font=('Arial', 30, 'normal'))
+        write(tiles[mark], font=('Arial', 30, 'normal'), align="center")
 
     update()
     if (winCount > 0):
@@ -112,3 +115,4 @@ tracer(False)
 onscreenclick(tap)
 draw()
 done()
+
