@@ -1,12 +1,8 @@
-"""Memory, puzzle game of number pairs.
+"""
+Memory, puzzle game of number pairs.
 
-Exercises:
-
-1. Count and print how many taps occur.
-2. Decrease the number of tiles to a 4x4 grid.
-3. Detect when all tiles are revealed.
-4. Center single-digit tile.
-5. Use letters instead of tiles.
+Programador 1: Isabel Cristina Valdes Luevanos
+Programador 2: Victor Hugo Portilla Ortiz
 """
 
 from random import *
@@ -62,16 +58,19 @@ def xy(count):
 
 def tap(x, y):
     """Update mark and hidden tiles based on tap."""
+    #Every time the player clicks, we update and display the total taps counter
     global contTaps
     contTaps = contTaps + 1
     spot = index(x, y)
     mark = state['mark']
     goto(0,210)
+    #align is a parameter that can center the written text
     write(contTaps, font=("Arial", 30, "normal"), align = "center")
 
     if mark is None or mark == spot or tiles[mark] != tiles[spot]:
         state['mark'] = spot
     else:
+        #Every time a player gets a right pair, we update the winning counter
         global winCount
         winCount = winCount - 1
         hide[spot] = False
@@ -101,13 +100,15 @@ def draw():
         write(tiles[mark], font=('Arial', 30, 'normal'), align="center")
 
     update()
+
+    #We only update the game if the player hasn't won 
     if (winCount > 0):
         ontimer(draw, 100)
     else:
         youWin()
     
 
-#shuffle(tiles)
+shuffle(tiles)
 setup(420, 460, 370, 0)
 addshape(car)
 hideturtle()
